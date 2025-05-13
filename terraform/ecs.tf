@@ -34,6 +34,8 @@ resource "aws_ecs_service" "api_service" {
   task_definition = aws_ecs_task_definition.api_task.arn
   launch_type     = "FARGATE"
   desired_count   = 2
+  deployment_minimum_healthy_percent = 50  # ← ここを追加
+  deployment_maximum_percent         = 200 # ← スケールアウト時の許容量
 
   network_configuration {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_c.id] # プライベートサブネット
