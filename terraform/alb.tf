@@ -1,12 +1,12 @@
 # ALBの作成（インターネット向け、2つのAZに対応）
 resource "aws_lb" "api_alb" {
   name               = "api-alb"
-  load_balancer_type = "application"                   # アプリケーションロードバランサー
-  subnets            = [                               # パブリックサブネットに配置
+  load_balancer_type = "application" # アプリケーションロードバランサー
+  subnets = [                        # パブリックサブネットに配置
     aws_subnet.public_a.id,
     aws_subnet.public_c.id
   ]
-  security_groups    = [aws_security_group.alb_sg.id]  # ALB用のSGを適用
+  security_groups = [aws_security_group.alb_sg.id] # ALB用のSGを適用
 
   tags = {
     Name = "api-alb"
@@ -16,9 +16,9 @@ resource "aws_lb" "api_alb" {
 # ターゲットグループの作成（ECSタスクのターゲット先）
 resource "aws_lb_target_group" "api_tg" {
   name        = "api-tg"
-  port        = 8080                     # ECSタスクがリッスンするポート
+  port        = 8080 # ECSタスクがリッスンするポート
   protocol    = "HTTP"
-  target_type = "ip"                     # Fargateでは「ip」指定が必須
+  target_type = "ip" # Fargateでは「ip」指定が必須
   vpc_id      = aws_vpc.main.id
 
   health_check {

@@ -6,17 +6,17 @@ resource "aws_ecs_cluster" "main" {
 # タスク定義（Dockerイメージ指定）
 resource "aws_ecs_task_definition" "api_task" {
   family                   = "api-task"
-  requires_compatibilities = ["FARGATE"]              # Fargateで起動
-  network_mode             = "awsvpc"                 # Fargateでは必須
-  cpu                      = "256"                    # 0.25 vCPU（最小構成）
-  memory                   = "512"                    # 512MB
+  requires_compatibilities = ["FARGATE"] # Fargateで起動
+  network_mode             = "awsvpc"    # Fargateでは必須
+  cpu                      = "256"       # 0.25 vCPU（最小構成）
+  memory                   = "512"       # 512MB
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn  # 簡易化のため同じに
+  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn # 簡易化のため同じに
 
   container_definitions = jsonencode([
     {
-      name      = "api-container"
-      image     = "081670647694.dkr.ecr.ap-northeast-1.amazonaws.com/toshihi-repository:latest"
+      name  = "api-container"
+      image = "081670647694.dkr.ecr.ap-northeast-1.amazonaws.com/toshihi-repository:latest"
       portMappings = [
         {
           containerPort = 8080
@@ -36,8 +36,8 @@ resource "aws_ecs_service" "api_service" {
   desired_count   = 2
 
   network_configuration {
-    subnets         = [aws_subnet.private_a.id, aws_subnet.private_c.id]  # プライベートサブネット
-    security_groups = [aws_security_group.ecs_sg.id]                      # ECS用SG
+    subnets          = [aws_subnet.private_a.id, aws_subnet.private_c.id] # プライベートサブネット
+    security_groups  = [aws_security_group.ecs_sg.id]                     # ECS用SG
     assign_public_ip = false                                              # NAT越しで通信
   }
 
@@ -47,6 +47,6 @@ resource "aws_ecs_service" "api_service" {
     container_port   = 8080
   }
 
-  depends_on = [aws_lb_listener.api_listener]  # ALBのリスナーが先に必要
+  depends_on = [aws_lb_listener.api_listener] # ALBのリスナーが先に必要
 }
 

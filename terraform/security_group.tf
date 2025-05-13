@@ -9,7 +9,7 @@ resource "aws_security_group" "alb_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # インターネット全体から受け入れる
+    cidr_blocks = ["0.0.0.0/0"] # インターネット全体から受け入れる
   }
 
   # アウトバウンド：すべて許可（デフォルト）
@@ -36,7 +36,7 @@ resource "aws_security_group" "ecs_sg" {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]  # ALB SGからのみ許可
+    security_groups = [aws_security_group.alb_sg.id] # ALB SGからのみ許可
   }
 
   # アウトバウンド：すべて許可（外部アクセス用）
